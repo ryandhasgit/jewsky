@@ -50,9 +50,10 @@ export abstract class FirehoseSubscriptionBase {
       console.log("attempting to instantiate AtpAgent")
       const agent = new AtpAgent({ service: 'https://bsky.social' })
       // const password = appConsts.app_pw;
+      console.log("atp agent obj:" + agent)
       console.log("attempting to get env variable for handle")
       const handle = process.env.HANDLE ?? ''
-      console.log("attempting to get env variable for password")
+      console.log("handle is" + handle + "attempting to get env variable for password")
       const password = process.env.PASSWORD ?? ''
       const uri = appConsts.post_uri;
       console.log("attempting to call api")

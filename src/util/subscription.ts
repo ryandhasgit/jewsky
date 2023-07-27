@@ -47,13 +47,19 @@ export abstract class FirehoseSubscriptionBase {
     // this is hwere rudy was getting blacksky people
     // they came from a file, but we don't want to do that
     try {
+      console.log("attempting to instantiate AtpAgent")
       const agent = new AtpAgent({ service: 'https://bsky.social' })
       // const password = appConsts.app_pw;
+      console.log("attempting to get env variable for handle")
       const handle = process.env.HANDLE ?? ''
+      console.log("attempting to get env variable for password")
       const password = process.env.PASSWORD ?? ''
       const uri = appConsts.post_uri;
+      console.log("attempting to call api")
       await agent.login({ identifier: handle, password })
+      console.log("api call did not fail catastrophically")
       const repostData = await agent.api.app.bsky.feed.getRepostedBy({uri});
+      console.log("we also get post data somehow, hooray?")
      
       let repostedBy = repostData.data.repostedBy
 

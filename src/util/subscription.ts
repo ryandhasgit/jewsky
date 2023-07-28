@@ -57,16 +57,18 @@ export abstract class FirehoseSubscriptionBase {
       const password = process.env.PASSWORD ?? ''
       const uri = appConsts.post_uri;
       console.log("attempting to call api")
-      await agent.login({ identifier: handle, password })
+      // await agent.login({ identifier: handle, password })
       console.log("api call did not fail catastrophically")
-      const repostData = await agent.api.app.bsky.feed.getRepostedBy({uri});
+      // const repostData = await agent.api.app.bsky.feed.getRepostedBy({uri});
       console.log("we also get post data somehow, hooray?")
      
-      let repostedBy = repostData.data.repostedBy
+      // let repostedBy = repostData.data.repostedBy
 
-      let jews = new Set(repostedBy.map((poster)=> {
-        return poster.did;
-      }))
+      // let jews = new Set(repostedBy.map((poster)=> {
+      //   return poster.did;
+      // }))
+
+      let jews = new Set<string>()
       // let jews : any[] = []
       // if (repostedBy){
       //   jews = [...new Set(repostedBy.map((poster)=> {return poster.did})

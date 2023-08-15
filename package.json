@@ -24,12 +24,12 @@
     "kysely": "^0.22.0",
     "multiformats": "^9.9.0",
     "ts-node": "^10.9.1",
-    "node-fetch": "2"
+    "node-fetch": "2",
+    "typescript": "^5.0.4"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.4",
     "@types/express": "^4.17.17",
-    "@types/node": "^20.1.2",
-    "typescript": "^5.0.4"
+    "@types/node": "^20.1.2"
   }
 }

@@ -9,8 +9,7 @@
   "scripts": {
     "publishFeed": "ts-node scripts/publishFeedGen.ts",
     "start": "ts-node src/index.ts",
-    "tsc": "tsc",
-    "build": "npm run tsc"
+    "build": "tsc"
   },
   "dependencies": {
     "@atproto/api": "^0.3.7",

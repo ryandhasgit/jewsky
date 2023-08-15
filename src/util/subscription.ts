@@ -13,7 +13,7 @@ import {
 } from '../lexicon/types/com/atproto/sync/subscribeRepos'
 import { Database } from '../db'
 import { AtpAgent } from '@atproto/api'
-import * as appConsts from '../temp-consts'
+// import * as appConsts from '../temp-consts'
 
 function parseReposts(repostsData){
   // move jew logic into here
@@ -48,14 +48,14 @@ export abstract class FirehoseSubscriptionBase {
     // they came from a file, but we don't want to do that
     try {
       console.log("attempting to instantiate AtpAgent")
-      const agent = new AtpAgent({ service: 'https://bsky.social' })
+      // const agent = new AtpAgent({ service: 'https://bsky.social' })
       // const password = appConsts.app_pw;
-      console.log("atp agent obj:" + agent)
+      // console.log("atp agent obj:" + agent)
       console.log("attempting to get env variable for handle")
       const handle = process.env.HANDLE ?? ''
       console.log("handle is" + handle + "attempting to get env variable for password")
       const password = process.env.PASSWORD ?? ''
-      const uri = appConsts.post_uri;
+      // const uri = appConsts.post_uri;
       console.log("attempting to call api")
       // await agent.login({ identifier: handle, password })
       console.log("api call did not fail catastrophically")

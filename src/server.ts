@@ -66,7 +66,7 @@ export class FeedGenerator {
   async start(): Promise<http.Server> {
     await migrateToLatest(this.db)
     this.firehose.run(this.cfg.subscriptionReconnectDelay) // we call run on firehose, the abstract is declared in subscription.ts inside util
-    this.server = this.app.listen(this.cfg.port, this.cfg.listenhost)
+    this.server = this.app.listen(process.env.PORT || this.cfg.listenhost)
     //@ts-ignore
     await events.once(this.server, 'listening')
     //@ts-ignore

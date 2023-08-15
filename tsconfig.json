@@ -12,7 +12,8 @@
     "alwaysStrict": true,
     "allowUnreachableCode": false,
     "strictNullChecks": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowJs" : false
   },
   "include": ["./src/**/*.ts"],
   "exclude": [

@@ -8,11 +8,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
   async handleEvent(evt: RepoEvent, jews) {
     if (!isCommit(evt)) return
     const ops = await getOpsByType(evt)
-    // console.log("elad suckin' a big ol dick haha jk")
-    // console.log("jew count: " + jews.length)
-    // This logs the text of every post off the firehose.
-    // Just for fun :)
-    // Delete before actually using
     // for (const post of ops.posts.creates) {
     //   console.log(post.record.text)
     // }
@@ -30,7 +25,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
           })
 
           return (isJew || hashtags.includes('#jewsky') && !hashtags.includes('#private'))
-        // return create.record.text.toLowerCase().includes('alf')
       })
       .map((create) => {
         // map related posts to a db row 

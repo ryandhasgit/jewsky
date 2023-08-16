@@ -67,15 +67,6 @@ export abstract class FirehoseSubscriptionBase {
         return poster.did;
       }))
 
-      // let jews = new Set<string>()
-      // let jews : any[] = []
-      // if (repostedBy){
-      //   jews = [...new Set(repostedBy.map((poster)=> {return poster.did})
-      //   )]
-      // }
-      console.log("before jews")
-      console.log(jews)
-      console.log("past jews")
       for await (const evt of this.sub) {
         try {
           await this.handleEvent(evt, jews) // rudy had changed the handler def to add a param for users
@@ -91,6 +82,7 @@ export abstract class FirehoseSubscriptionBase {
       console.error('repo subscription errored', err)
       setTimeout(() => this.run(subscriptionReconnectDelay), subscriptionReconnectDelay)
     }
+    
   }
 
   async updateCursor(cursor: number) {

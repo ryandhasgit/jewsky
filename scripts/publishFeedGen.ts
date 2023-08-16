@@ -21,15 +21,15 @@ const run = async () => {
 
   // A display name for your feed
   // Ex: What's Hot
-  const displayName = 'Jewsky Plus'
+  const displayName = 'JewSky Plus'
 
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
-  const description = 'The Sky is Jew'
+  const description = 'A (mostly) working feed for Jews on bluesky. Made by @jewish.bsky.social and the JewSky project. Come check out our discord: https://discord.gg/qnEvFSUU'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
-  const avatar: string = ''
+  const avatar: string = 'assets/jewsky.png'
 
   // -------------------------------------
   // NO NEED TO TOUCH ANYTHING BELOW HERE

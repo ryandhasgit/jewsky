@@ -67,9 +67,14 @@ export abstract class FirehoseSubscriptionBase {
         return poster.did;
       }))
 
-      for await (const evt of this.sub) {
+      // this lop may be called every time this.sub is updated
+      // or when we saw everyting coming in its because maybe 1000 instances a second were coming in
+      for await (const evt of this.sub) { // this is hit any time there is a post!
         try {
+          // console.log(evt)
+          // console.log("When am i getting hit?")
           await this.handleEvent(evt, jews) // rudy had changed the handler def to add a param for users
+          // this.db query??
         } catch (err) {
           console.error('repo subscription could not handle message', err)
         }
@@ -85,6 +90,7 @@ export abstract class FirehoseSubscriptionBase {
     
   }
 
+  // this updates list of posts subscribed to the alg????
   async updateCursor(cursor: number) {
     await this.db
       .updateTable('sub_state')

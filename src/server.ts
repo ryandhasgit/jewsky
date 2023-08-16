@@ -32,7 +32,7 @@ export class FeedGenerator {
   }
 
   static create(cfg: Config) {
-    const app = express()
+    const app = express() // what is express app?
     const db = createDb(cfg.sqliteLocation) // where db is created
     const firehose = new FirehoseSubscription(db, cfg.subscriptionEndpoint)
 
@@ -66,9 +66,9 @@ export class FeedGenerator {
   async start(): Promise<http.Server> {
     await migrateToLatest(this.db)
     this.firehose.run(this.cfg.subscriptionReconnectDelay) // we call run on firehose, the abstract is declared in subscription.ts inside util
-    this.server = this.app.listen(process.env.PORT || this.cfg.listenhost)
+    this.server = this.app.listen(process.env.PORT || this.cfg.listenhost) // express app has listen function that tells the app to listen to http requests from this port
     //@ts-ignore
-    await events.once(this.server, 'listening')
+    await events.once(this.server, 'listening') // this might just be adding the listener; take this server and attach it to the listening event; once might be a singleton
     //@ts-ignore
     return this.server
   }

@@ -3,6 +3,7 @@ import {
   isCommit,
 } from './lexicon/types/com/atproto/sync/subscribeRepos'
 import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
+import * as appConsts from '../src/util/app-consts' 
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
   async handleEvent(evt: RepoEvent, jews) {
@@ -15,8 +16,12 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => { // this is the garbage collection; drop anything unrelated 
-        let isJew = jews.has(create.author)
-
+        let isJew = jews.has(create.author) // what happens if create is null and we null check author? isJew is false? undefined? your motther???
+        
+        // TEMP FIX to see if we can add people into the new list dynamically instead of at app start; we still need to account for un-reposts (ugh)
+        if (create?.cid == appConsts.post_cid){
+          jews.push(create.author)
+        }
         let hashtags: any[] = []
         create?.record?.text?.toLowerCase()
           ?.match(/#[^\s#\.\;]*/gmi)
@@ -30,7 +35,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         // map related posts to a db row 
         // all of these get mapped to an object id 
         // this IS WHERE THEY ARE CREATED
-        console.log(create.record.text)
+        // console.log(create.record.text) // all posts to create log
         return {
           uri: create.uri,
           cid: create.cid,

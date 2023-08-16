@@ -17,4 +17,4 @@ export const migrateToLatest = async (db: Database) => {
   if (error) throw error
 }
 
-export type Database = Kysely<DatabaseSchema>
+export type Database = Kysely<DatabaseSchema> // kysely is the sqllite db wrapper

@@ -12,16 +12,26 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     // for (const post of ops.posts.creates) {
     //   console.log(post.record.text)
     // }
-
+    const repostsUsersToAdd = ops.reposts.creates
+      .filter((create) => {
+        // console.log("registering that a repost event has occurred")
+        if (create?.cid == appConsts.post_cid) {
+          console.log("found the jewsky repost has been reposted")
+          console.log("author did is: " + create.author)
+          console.log("author exists in list already:"+ jews.has(create.author))
+          if (!jews.has(create.author))
+            jews.push(create.author)
+        }
+      })
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => { // this is the garbage collection; drop anything unrelated 
         let isJew = jews.has(create.author) // what happens if create is null and we null check author? isJew is false? undefined? your motther???
-        
-        // TEMP FIX to see if we can add people into the new list dynamically instead of at app start; we still need to account for un-reposts (ugh)
-        if (create?.cid == appConsts.post_cid){
-          jews.push(create.author)
-        }
+        // // TEMP FIX to see if we can add people into the new list dynamically instead of at app start; we still need to account for un-reposts (ugh)
+        // if (create?.cid == appConsts.post_cid) {
+        //   var repostedBy = ops.reposts.creates
+        //   jews.push(create.author)
+        // }
         let hashtags: any[] = []
         create?.record?.text?.toLowerCase()
           ?.match(/#[^\s#\.\;]*/gmi)

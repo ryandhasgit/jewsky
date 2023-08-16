@@ -14,6 +14,7 @@ import {
 import { Database } from '../db'
 import { AtpAgent } from '@atproto/api'
 import * as appConsts from '../util/app-consts'
+import { response } from 'express'
 
 function parseReposts(repostsData){
   // move jew logic into here
@@ -58,14 +59,16 @@ export abstract class FirehoseSubscriptionBase {
       console.log("attempting to call api")
       await agent.login({ identifier: handle, password })
       console.log("api call did not fail catastrophically")
-      const repostData = await agent.api.app.bsky.feed.getRepostedBy({uri});
+      const repostData = await agent.api.app.bsky.feed.getRepostedBy({uri, limit: 100});
       console.log("we also get post data somehow, sick?")
 
       let repostedBy = repostData.data.repostedBy
+      console.log("length of repostData obj:" + repostData.data.repostedBy.length)
 
       let jews = new Set(repostedBy.map((poster)=> {
         return poster.did;
       }))
+      console.log("size of jews" + jews.size)
 
       // this lop may be called every time this.sub is updated
       // or when we saw everyting coming in its because maybe 1000 instances a second were coming in
@@ -121,7 +124,6 @@ export const getOpsByType = async (evt: Commit): Promise<OperationsByType> => {
   for (const op of evt.ops) {
     const uri = `at://${evt.repo}/${op.path}`
     const [collection] = op.path.split('/')
-
     if (op.action === 'update') continue // updates not supported yet
 
     if (op.action === 'create') {

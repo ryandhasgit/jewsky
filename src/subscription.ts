@@ -20,7 +20,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => { // this is the garbage collection; drop anything unrelated 
-        // only alf-related posts
         let isJew = jews.has(create.author)
 
         let hashtags: any[] = []

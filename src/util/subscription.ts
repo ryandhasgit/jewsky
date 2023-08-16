@@ -13,7 +13,7 @@ import {
 } from '../lexicon/types/com/atproto/sync/subscribeRepos'
 import { Database } from '../db'
 import { AtpAgent } from '@atproto/api'
-// import * as appConsts from '../temp-consts'
+import * as appConsts from '../util/app-consts'
 
 function parseReposts(repostsData){
   // move jew logic into here
@@ -48,27 +48,26 @@ export abstract class FirehoseSubscriptionBase {
     // they came from a file, but we don't want to do that
     try {
       console.log("attempting to instantiate AtpAgent")
-      // const agent = new AtpAgent({ service: 'https://bsky.social' })
-      // const password = appConsts.app_pw;
-      // console.log("atp agent obj:" + agent)
+      const agent = new AtpAgent({ service: 'https://bsky.social' })
+      console.log("atp agent obj:" + agent)
       console.log("attempting to get env variable for handle")
       const handle = process.env.HANDLE ?? ''
       console.log("handle is" + handle + "attempting to get env variable for password")
       const password = process.env.PASSWORD ?? ''
-      // const uri = appConsts.post_uri;
+      const uri = appConsts.post_uri;
       console.log("attempting to call api")
-      // await agent.login({ identifier: handle, password })
+      await agent.login({ identifier: handle, password })
       console.log("api call did not fail catastrophically")
-      // const repostData = await agent.api.app.bsky.feed.getRepostedBy({uri});
-      console.log("we also get post data somehow, hooray?")
-     
-      // let repostedBy = repostData.data.repostedBy
+      const repostData = await agent.api.app.bsky.feed.getRepostedBy({uri});
+      console.log("we also get post data somehow, sick?")
 
-      // let jews = new Set(repostedBy.map((poster)=> {
-      //   return poster.did;
-      // }))
+      let repostedBy = repostData.data.repostedBy
 
-      let jews = new Set<string>()
+      let jews = new Set(repostedBy.map((poster)=> {
+        return poster.did;
+      }))
+
+      // let jews = new Set<string>()
       // let jews : any[] = []
       // if (repostedBy){
       //   jews = [...new Set(repostedBy.map((poster)=> {return poster.did})
@@ -79,7 +78,7 @@ export abstract class FirehoseSubscriptionBase {
       console.log("past jews")
       for await (const evt of this.sub) {
         try {
-          await this.handleEvent(evt, jews) // rudy had changed the handler def to add a param for users 
+          await this.handleEvent(evt, jews) // rudy had changed the handler def to add a param for users
         } catch (err) {
           console.error('repo subscription could not handle message', err)
         }

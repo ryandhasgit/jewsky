@@ -14,7 +14,6 @@ import {
 import { Database } from '../db'
 import { AtpAgent } from '@atproto/api'
 import * as appConsts from '../util/app-consts'
-import { response } from 'express'
 
 function parseReposts(repostsData){
   // move jew logic into here
@@ -59,11 +58,30 @@ export abstract class FirehoseSubscriptionBase {
       console.log("attempting to call api")
       await agent.login({ identifier: handle, password })
       console.log("api call did not fail catastrophically")
-      const repostData = await agent.api.app.bsky.feed.getRepostedBy({uri, limit: 100});
-      console.log("we also get post data somehow, sick?")
+      
+      // test code
+      console.log("getting first repost data")
+      let repostData = await agent.api.app.bsky.feed.getRepostedBy({uri, limit: 70})
+      let repostedBy = repostData.data.repostedBy;
+      
+      console.log("repostedBys length: " + repostedBy.length)
+      let cursor = repostData.data.cursor;
+      console.log("cursor object:" + cursor)
+      console.log("Cursor is null:" + cursor == null + '\n')
+      while(cursor != null) {
+        console.log("cursor loop, getting newReposts")
+        let newReposts = await agent.api.app.bsky.feed.getRepostedBy({uri, limit: 70, cursor: cursor})
+        console.log("new reposts length:" + newReposts.data.repostedBy.length + "\n")
+        
+        repostedBy.push(...newReposts.data.repostedBy)
+        console.log("running list of reposts: " + repostedBy.length)
+        
+        cursor = newReposts.data.cursor
+        console.log("cursor is now: " + cursor)
+      }
+      console.log("outside while loop")
+      console.log("repostedBys count is now: " + repostedBy.length)
 
-      let repostedBy = repostData.data.repostedBy
-      console.log("length of repostData obj:" + repostData.data.repostedBy.length)
 
       let jews = new Set(repostedBy.map((poster)=> {
         return poster.did;

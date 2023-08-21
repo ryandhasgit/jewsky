@@ -49,39 +49,27 @@ export abstract class FirehoseSubscriptionBase {
     try {
       console.log("attempting to instantiate AtpAgent")
       const agent = new AtpAgent({ service: 'https://bsky.social' })
-      console.log("atp agent obj:" + agent)
-      console.log("attempting to get env variable for handle")
       const handle = process.env.HANDLE ?? ''
-      console.log("handle is" + handle + "attempting to get env variable for password")
       const password = process.env.PASSWORD ?? ''
       const uri = appConsts.post_uri;
       console.log("attempting to call api")
       await agent.login({ identifier: handle, password })
-      console.log("api call did not fail catastrophically")
       
-      // test code
       console.log("getting first repost data")
       let repostData = await agent.api.app.bsky.feed.getRepostedBy({uri, limit: 70})
       let repostedBy = repostData.data.repostedBy;
       
       console.log("repostedBys length: " + repostedBy.length)
       let cursor = repostData.data.cursor;
-      console.log("cursor object:" + cursor)
       console.log("Cursor is null:" + cursor == null + '\n')
       while(cursor != null) {
         console.log("cursor loop, getting newReposts")
         let newReposts = await agent.api.app.bsky.feed.getRepostedBy({uri, limit: 70, cursor: cursor})
         console.log("new reposts length:" + newReposts.data.repostedBy.length + "\n")
-        
         repostedBy.push(...newReposts.data.repostedBy)
         console.log("running list of reposts: " + repostedBy.length)
-        
         cursor = newReposts.data.cursor
-        console.log("cursor is now: " + cursor)
       }
-      console.log("outside while loop")
-      console.log("repostedBys count is now: " + repostedBy.length)
-
 
       let jews = new Set(repostedBy.map((poster)=> {
         return poster.did;
@@ -92,9 +80,8 @@ export abstract class FirehoseSubscriptionBase {
       // or when we saw everyting coming in its because maybe 1000 instances a second were coming in
       for await (const evt of this.sub) { // this is hit any time there is a post!
         try {
-          // console.log(evt)
-          // console.log("When am i getting hit?")
-          await this.handleEvent(evt, jews) // rudy had changed the handler def to add a param for users
+
+          await this.handleEvent(evt, jews) 
           // this.db query??
         } catch (err) {
           console.error('repo subscription could not handle message', err)

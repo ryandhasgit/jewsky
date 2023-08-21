@@ -32,7 +32,7 @@ export class FeedGenerator {
   }
 
   static create(cfg: Config) {
-    const app = express() // what is express app?
+    const app = express() 
     const db = createDb(cfg.sqliteLocation) // where db is created
     const firehose = new FirehoseSubscription(db, cfg.subscriptionEndpoint)
 
@@ -50,7 +50,7 @@ export class FeedGenerator {
         blobLimit: 5 * 1024 * 1024, // 5mb
       },
     })
-    const ctx: AppContext = {
+    const ctx: AppContext = { // what is this?
       db,
       didResolver,
       cfg,

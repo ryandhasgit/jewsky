@@ -34,7 +34,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         // console.log(del.uri)
         jews.forEach(element => {
           if(del.uri.includes(element))
-            console.log("ayy we did it")
+            console.log("ayy we did it: " + del.uri)
 
         })
         return del

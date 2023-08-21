@@ -25,7 +25,7 @@ const run = async () => {
 
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
-  const description = 'A beta feed for Jews on bluesky. Made by @jewish.bsky.social and the JewSky project. Come check out our discord: https://discord.gg/qnEvFSUU'
+  const description = 'A beta feed for Jews on bluesky. Made by Space Jew and the JewSky project. Come check out our discord: https://discord.gg/nsN8esyxVP'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg

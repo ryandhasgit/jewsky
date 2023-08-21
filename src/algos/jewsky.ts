@@ -28,11 +28,11 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
   }
   const res = await builder.execute()
 
-  let feed = res.map((row) => ({
+  let staticFeed = res.map((row) => ({
     post: row.uri,
   }))
   // feed.push({post: appConsts.post_uri})
-  let feedWithStaticPost = [{post: appConsts.post_uri}, ...feed]
+  let feed = [{post: appConsts.post_uri}, ...staticFeed]
   let cursor: string | undefined
   const last = res.at(-1)
   if (last) {
@@ -41,6 +41,6 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 
   return {
     cursor,
-    feedWithStaticPost,
+    feed,
   }
 }

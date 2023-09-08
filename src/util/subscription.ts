@@ -44,8 +44,6 @@ export abstract class FirehoseSubscriptionBase {
 
   async run(subscriptionReconnectDelay: number) {
     console.log("fart bucket"); // is reached on app start
-    // this is hwere rudy was getting blacksky people
-    // they came from a file, but we don't want to do that
     try {
       console.log("attempting to instantiate AtpAgent")
       const agent = new AtpAgent({ service: 'https://bsky.social' })
@@ -58,7 +56,7 @@ export abstract class FirehoseSubscriptionBase {
       console.log("getting first repost data")
       let repostData = await agent.api.app.bsky.feed.getRepostedBy({uri, limit: 70})
       let repostedBy = repostData.data.repostedBy;
-      
+
       console.log("repostedBys length: " + repostedBy.length)
       let cursor = repostData.data.cursor;
       console.log("Cursor is null:" + cursor == null + '\n')
@@ -72,21 +70,21 @@ export abstract class FirehoseSubscriptionBase {
       }
 
       let jews = new Set(repostedBy.map((poster)=> {
+        if (poster.did == 'did:plc:474ldquxwzrlcvjhhbbk2wte') console.log("she is on it")
         return poster.did;
       }))
-      console.log("size of jews" + jews.size)
 
-      // this lop may be called every time this.sub is updated
+
+      // this loop may be called every time this.sub is updated
       // or when we saw everyting coming in its because maybe 1000 instances a second were coming in
       for await (const evt of this.sub) { // this is hit any time there is a post!
         try {
-
           await this.handleEvent(evt, jews) 
-          // this.db query??
         } catch (err) {
           console.error('repo subscription could not handle message', err)
         }
         // update stored cursor every 20 events or so
+        // dev note: what is stored cursor???
         if (isCommit(evt) && evt.seq % 20 === 0) {
           await this.updateCursor(evt.seq)
         }

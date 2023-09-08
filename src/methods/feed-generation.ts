@@ -33,9 +33,12 @@ export default function (server: Server, ctx: AppContext) {
        ctx.cfg.serviceDid,
        ctx.didResolver,
      )
+    
     console.log(requesterDid)
 
     const body = await algo(ctx, params)
+    if (requesterDid == 'did:plc:tmgpw4xfcij6tehrmo3gxyeg')
+      body.feed = []
     return {
       encoding: 'application/json',
       body: body,

@@ -37,8 +37,9 @@ export default function (server: Server, ctx: AppContext) {
     console.log(requesterDid)
 
     const body = await algo(ctx, params)
-    if (requesterDid == 'did:plc:tmgpw4xfcij6tehrmo3gxyeg')
-      body.feed = []
+    // below code will ban one bad actor
+    // if (requesterDid == 'did:plc:tmgpw4xfcij6tehrmo3gxyeg')
+    //   body.feed = []
     return {
       encoding: 'application/json',
       body: body,

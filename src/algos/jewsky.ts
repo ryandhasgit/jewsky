@@ -33,7 +33,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
   // }))
   // let feed = [{post: appConsts.post_uri}, ...staticFeed]
 
-    let feed = res.map((row) => ({
+  let feed = res.map((row) => ({
     post: row.uri,
   }))
   let cursor: string | undefined

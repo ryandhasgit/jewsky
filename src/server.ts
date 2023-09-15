@@ -5,7 +5,7 @@ import { DidResolver, MemoryCache } from '@atproto/did-resolver'
 import { createServer } from './lexicon'
 import feedGeneration from './methods/feed-generation'
 import describeGenerator from './methods/describe-generator'
-import { createDb, Database, migrateToLatest } from './db'
+import { createDb, Database } from './db'
 import { FirehoseSubscription } from './subscription'
 import { AppContext, Config } from './config'
 import wellKnown from './well-known'
@@ -64,7 +64,8 @@ export class FeedGenerator {
   }
 
   async start(): Promise<http.Server> {
-    await migrateToLatest(this.db)
+    // await migrateToLatest(this.db) // sqlite
+    // await migrateToLatest()
     this.firehose.run(this.cfg.subscriptionReconnectDelay) // we call run on firehose, the abstract is declared in subscription.ts inside util
     this.server = this.app.listen(process.env.PORT || this.cfg.listenhost) // express app has listen function that tells the app to listen to http requests from this port
     //@ts-ignore

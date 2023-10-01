@@ -28,14 +28,14 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
   }
   const res = await builder.execute()
 
-  let staticFeed = res.map((row) => ({
-    post: row.uri,
-  }))
-  let feed = [{post: appConsts.post_uri}, ...staticFeed]
-
-  // let feed = res.map((row) => ({
+  // let staticFeed = res.map((row) => ({
   //   post: row.uri,
   // }))
+  // let feed = [{post: appConsts.post_uri}, ...staticFeed]
+
+  let feed = res.map((row) => ({
+    post: row.uri,
+  }))
 
   let cursor: string | undefined
   const last = res.at(-1)

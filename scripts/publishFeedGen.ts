@@ -17,19 +17,19 @@ const run = async () => {
   // A short name for the record that will show in urls
   // Lowercase with no spaces.
   // Ex: whats-hot
-  const recordName = 'soup-test'
+  const recordName = 'jewsky-plus'
 
   // A display name for your feed
   // Ex: What's Hot
-  const displayName = 'Test of Soup'
+  const displayName = 'JewSky Plus'
 
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
-  const description = 'This feed sucks'
+  const description = 'A beta feed for Jews on bluesky. Made by Space Jew and the JewSky project. Come check out our discord: https://discord.gg/nsN8esyxVP'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
-  const avatar: string = ''
+  const avatar: string = 'assets/jewsky.png'
 
   // -------------------------------------
   // NO NEED TO TOUCH ANYTHING BELOW HERE
@@ -45,13 +45,6 @@ const run = async () => {
   const agent = new AtpAgent({ service: 'https://bsky.social' })
   await agent.login({ identifier: handle, password })
 
-  try {
-    await agent.api.app.bsky.feed.describeFeedGenerator()
-  } catch (err) {
-    throw new Error(
-      'The bluesky server is not ready to accept published custom feeds yet',
-    )
-  }
 
   let avatarRef: BlobRef | undefined
   if (avatar) {

@@ -17,19 +17,19 @@ const run = async () => {
   // A short name for the record that will show in urls
   // Lowercase with no spaces.
   // Ex: whats-hot
-  const recordName = 'jewsky-plus'
+  const recordName = 'soup-test'
 
   // A display name for your feed
   // Ex: What's Hot
-  const displayName = 'JewSky Plus'
+  const displayName = 'Test of Soup'
 
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
-  const description = 'A beta feed for Jews on bluesky. Made by Space Jew and the JewSky project. Come check out our discord: https://discord.gg/nsN8esyxVP'
+  const description = 'This feed sucks'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
-  const avatar: string = 'assets/jewsky.png'
+  const avatar: string = ''
 
   // -------------------------------------
   // NO NEED TO TOUCH ANYTHING BELOW HERE

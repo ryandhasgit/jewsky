@@ -27,18 +27,21 @@ export default function (server: Server, ctx: AppContext) {
     // }
     
     //  Example of how to check auth if giving user-specific results:
-     
-    const requesterDid = await validateAuth(
-       req,
-       ctx.cfg.serviceDid,
-       ctx.didResolver,
-     )
+
+    // uncomment this for auth
+    // const requesterDid = await validateAuth(
+    //    req,
+    //    ctx.cfg.serviceDid,
+    //    ctx.didResolver,
+    //  )
     
-    console.log(requesterDid)
+    // console.log(requesterDid)
 
     const body = await algo(ctx, params)
-    if (requesterDid == 'did:plc:tmgpw4xfcij6tehrmo3gxyeg')
-      body.feed = []
+
+    // also uncomment this
+    // if (requesterDid == 'did:plc:tmgpw4xfcij6tehrmo3gxyeg')
+      // body.feed = []
     return {
       encoding: 'application/json',
       body: body,

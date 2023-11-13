@@ -49,9 +49,9 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
         console.log("inside inner subscription service, iterating over jews list")
 
-        for (let dick of jews){
-          if (dick == create.author) console.log("congrats, we got a dick ta suck")
-        }
+        // for (let dick of jews){
+        //   if (dick == create.author) console.log("congrats, we got a dick ta suck")
+        // }
         // jews.array.forEach(element => {
         //   console.log(element);
         // });

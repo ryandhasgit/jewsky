@@ -47,10 +47,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       .filter((create) => { // this is the garbage collection; drop anything unrelated 
         let isJew = jews.has(create.author) // what happens if create is null and we null check author? isJew is false? undefined? your motther???
 
-        // jews.array.forEach(element => {
-        //   console.log(element);
-        // });
-
         if (isJew) console.log("jew")
 
         // console.log(create.record.text)

@@ -47,18 +47,12 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       .filter((create) => { // this is the garbage collection; drop anything unrelated 
         let isJew = jews.has(create.author) // what happens if create is null and we null check author? isJew is false? undefined? your motther???
 
-        console.log("inside inner subscription service, iterating over jews list")
-
-        // for (let dick of jews){
-        //   if (dick == create.author) console.log("congrats, we got a dick ta suck")
-        // }
         // jews.array.forEach(element => {
         //   console.log(element);
         // });
 
         if (isJew) console.log("jew")
-        console.log("inside postsToCreate")
-        // console.log("   " + create.author)
+
         // console.log(create.record.text)
         // // TEMP FIX to see if we can add people into the new list dynamically instead of at app start; we still need to account for un-reposts (ugh)
         // if (create?.cid == appConsts.post_cid) {

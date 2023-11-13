@@ -46,6 +46,20 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const postsToCreate = ops.posts.creates
       .filter((create) => { // this is the garbage collection; drop anything unrelated 
         let isJew = jews.has(create.author) // what happens if create is null and we null check author? isJew is false? undefined? your motther???
+
+        console.log("inside inner subscription service, iterating over jews list")
+
+        for (let dick of jews){
+          if (dick == create.author) console.log("congrats, we got a dick ta suck")
+        }
+        // jews.array.forEach(element => {
+        //   console.log(element);
+        // });
+
+        if (isJew) console.log("jew")
+        console.log("inside postsToCreate")
+        // console.log("   " + create.author)
+        // console.log(create.record.text)
         // // TEMP FIX to see if we can add people into the new list dynamically instead of at app start; we still need to account for un-reposts (ugh)
         // if (create?.cid == appConsts.post_cid) {
         //   var repostedBy = ops.reposts.creates
@@ -57,14 +71,15 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
           ?.map((hashtag) => {
             hashtags.push(hashtag)
           })
-
+          // console.log("inside creation")
           return (isJew || hashtags.includes('#jewsky') && !hashtags.includes('#private'))
       })
       .map((create) => {
         // map related posts to a db row 
         // all of these get mapped to an object id 
         // this IS WHERE THEY ARE CREATED
-        // console.log(create.record.text) // all posts to create log
+        console.log("inside mapping")
+        console.log(create.record.text) // all posts to create log
         return {
           uri: create.uri,
           cid: create.cid,
@@ -83,7 +98,8 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     }
     // here is where the posts get pushed up with a db call
     if (postsToCreate.length > 0) {
-      // console.log(postsToCreate[0])
+      console.log("here's what is being created")
+      console.log(postsToCreate[0])
       await this.db
         .insertInto('post')
         .values(postsToCreate)

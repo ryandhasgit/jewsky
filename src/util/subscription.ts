@@ -70,10 +70,8 @@ export abstract class FirehoseSubscriptionBase {
       }
 
       let jews = new Set(repostedBy.map((poster)=> {
-        if (poster.did == 'did:plc:474ldquxwzrlcvjhhbbk2wte') console.log("she is on it")
         return poster.did;
       }))
-
 
       // this loop may be called every time this.sub is updated
       // or when we saw everyting coming in its because maybe 1000 instances a second were coming in

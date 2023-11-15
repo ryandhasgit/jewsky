@@ -9,6 +9,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
   async handleEvent(evt: RepoEvent, jews) {
     if (!isCommit(evt)) return
     const ops = await getOpsByType(evt)
+    // loop over all posts
     // for (const post of ops.posts.creates) {
     //   console.log(post.record.text)
     // }
@@ -46,30 +47,18 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const postsToCreate = ops.posts.creates
       .filter((create) => { // this is the garbage collection; drop anything unrelated 
         let isJew = jews.has(create.author) // what happens if create is null and we null check author? isJew is false? undefined? your motther???
-
-        if (isJew) console.log("jew")
-
-        // console.log(create.record.text)
-        // // TEMP FIX to see if we can add people into the new list dynamically instead of at app start; we still need to account for un-reposts (ugh)
-        // if (create?.cid == appConsts.post_cid) {
-        //   var repostedBy = ops.reposts.creates
-        //   jews.push(create.author)
-        // }
         let hashtags: any[] = []
         create?.record?.text?.toLowerCase()
           ?.match(/#[^\s#\.\;]*/gmi)
           ?.map((hashtag) => {
             hashtags.push(hashtag)
           })
-          // console.log("inside creation")
           return (isJew || hashtags.includes('#jewsky') && !hashtags.includes('#private'))
       })
       .map((create) => {
         // map related posts to a db row 
         // all of these get mapped to an object id 
         // this IS WHERE THEY ARE CREATED
-        console.log("inside mapping")
-        console.log(create.record.text) // all posts to create log
         return {
           uri: create.uri,
           cid: create.cid,
@@ -80,7 +69,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       })
 
     if (postsToDelete.length > 0) {
-      // console.log(postsToDelete[0])
       await this.db
         .deleteFrom('post')
         .where('uri', 'in', postsToDelete)
@@ -88,7 +76,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     }
     // here is where the posts get pushed up with a db call
     if (postsToCreate.length > 0) {
-      console.log("here's what is being created")
       console.log(postsToCreate[0])
       await this.db
         .insertInto('post')

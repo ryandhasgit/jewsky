@@ -23,7 +23,6 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
     // here is where we may be able to squeeze in a post saved in the db that we want to display
     builder = builder
       .where('post.indexedAt', '<', timeStr)
-      .orWhere((qb) => qb.where('post.indexedAt', '=', timeStr))
       .where('post.cid', '<', cid)
   }
   const res = await builder.execute()

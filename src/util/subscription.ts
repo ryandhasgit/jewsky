@@ -14,9 +14,23 @@ import {
 import { Database } from '../db'
 import { AtpAgent } from '@atproto/api'
 import * as appConsts from '../util/app-consts'
+import crypto from 'node:crypto'
+import { decrypt } from 'dotenv'
 
-function parseReposts(repostsData){
+
+function parseReposts(repostsData) {
   // move jew logic into here
+}
+
+function decryptDID(encryptedDid) {
+  let algorithm = process.env.ENCRYPTION_ALG!
+  let pw = process.env.ENCRYPTION_KEY!
+  const key = crypto.scryptSync(pw, 'salt', 32)
+  const iv = Buffer.alloc(16, 0)
+  const decipher = crypto.createDecipheriv(algorithm, key, iv)
+  let decryptedDid = decipher.update(encryptedDid, 'hex', 'utf8')
+  decryptedDid += decipher.final('utf8')
+  return decryptedDid
 }
 
 export abstract class FirehoseSubscriptionBase {
@@ -47,37 +61,51 @@ export abstract class FirehoseSubscriptionBase {
     try {
       console.log("attempting to instantiate AtpAgent")
       const agent = new AtpAgent({ service: 'https://bsky.social' })
-      const handle = process.env.HANDLE ?? ''
-      const password = process.env.PASSWORD ?? ''
       const uri = appConsts.post_uri;
       console.log("attempting to call api")
-      await agent.login({ identifier: handle, password })
-      
+      await agent.login({ identifier: process.env.HANDLE ?? '', password: process.env.PASSWORD ?? '' })
+
       console.log("getting first repost data")
-      let repostData = await agent.api.app.bsky.feed.getRepostedBy({uri, limit: 70})
+      let repostData = await agent.api.app.bsky.feed.getRepostedBy({ uri, limit: 70 })
       let repostedBy = repostData.data.repostedBy;
 
       console.log("repostedBys length: " + repostedBy.length)
       let cursor = repostData.data.cursor;
       console.log("Cursor is null:" + cursor == null + '\n')
-      while(cursor != null) {
+      while (cursor != null) {
         console.log("cursor loop, getting newReposts")
-        let newReposts = await agent.api.app.bsky.feed.getRepostedBy({uri, limit: 70, cursor: cursor})
+        let newReposts = await agent.api.app.bsky.feed.getRepostedBy({ uri, limit: 70, cursor: cursor })
         console.log("new reposts length:" + newReposts.data.repostedBy.length + "\n")
         repostedBy.push(...newReposts.data.repostedBy)
         console.log("running list of reposts: " + repostedBy.length)
         cursor = newReposts.data.cursor
       }
 
-      let jews = new Set(repostedBy.map((poster)=> {
-        return poster.did;
+      // get bad actors (this won't work for entries over 100, but if we get to that point we'll have bigger problems than this first)
+      // typescript sucks so i just made it a POJO with "any" since the stupid thing didn't recognize the object correctly
+      let feed = await agent.app.bsky.feed.getAuthorFeed({ actor: appConsts.removal_did })
+      let decryptedDids = new Set(feed.data.feed.map((post) => {
+        let postText: any = post.post.record;
+        return decryptDID(postText.text)
       }))
+
+      console.log("repostedBy: " + repostedBy.length)
+      // map the jews without the putzes
+      let jews = new Set(repostedBy
+        .filter(poster => {
+          return !decryptedDids.has(poster.did)
+        })
+        .map(poster => {
+          return poster.did
+        }))
+
+      console.log("jews: " + jews.size)
 
       // this loop may be called every time this.sub is updated
       // or when we saw everyting coming in its because maybe 1000 instances a second were coming in
       for await (const evt of this.sub) { // this is hit any time there is a post!
         try {
-          await this.handleEvent(evt, jews) 
+          await this.handleEvent(evt, jews)
         } catch (err) {
           console.error('repo subscription could not handle message', err)
         }
@@ -91,7 +119,7 @@ export abstract class FirehoseSubscriptionBase {
       console.error('repo subscription errored', err)
       setTimeout(() => this.run(subscriptionReconnectDelay), subscriptionReconnectDelay)
     }
-    
+
   }
 
   // this updates list of posts subscribed to the alg????
